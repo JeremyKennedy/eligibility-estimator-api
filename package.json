@@ -9,9 +9,12 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "joi": "^17.4.2"
+  },
   "devDependencies": {
     "@azure/functions": "^2.0.0",
+    "@types/joi": "^17.2.3",
     "typescript": "^4.0.0"
   }
 }
