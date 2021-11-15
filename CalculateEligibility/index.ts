@@ -1,18 +1,35 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions';
 
+import Joi = require('joi');
+
+const schema = Joi.object({
+  age: Joi.number().integer().required(),
+});
+
 const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
 ): Promise<void> {
-  context.log('HTTP trigger function processed a request.');
-  const name = req.query.name || (req.body && req.body.name);
-  const responseMessage = name
-    ? 'Hello, ' + name + '. This HTTP triggered function executed successfully.'
-    : 'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.';
+  context.log(`Processing request: `, req.query);
 
+  // validation
+  const { error, value } = schema.validate(req.query);
+  if (error) {
+    context.res = {
+      status: 400,
+      body: { error: `Request is invalid!`, detail: error.details },
+    };
+    context.log(error);
+    return;
+  }
+  context.log('Passed validation.');
+
+  // processing
+  // TODO...
+
+  // completion
   context.res = {
-    // status: 200, /* Defaults to 200 */
-    body: responseMessage,
+    body: `Something worked! You provided: ${JSON.stringify(value)}`,
   };
 };
 
