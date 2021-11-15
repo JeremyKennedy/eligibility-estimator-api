@@ -1,0 +1,60 @@
+_type: export
+__export_format: 4
+__export_date: 2021-11-15T22:52:21.574Z
+__export_source: insomnia.desktop.app:v2021.6.0
+resources:
+  - _id: req_320b3b1af08a488da76e09884291541f
+    parentId: wrk_647b786b89944353900845be36994b16
+    modified: 1637016531942
+    created: 1637016500982
+    url: http://localhost:7071/api/CalculateEligibility
+    name: Calculate Eligibility
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1637016500982
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: wrk_647b786b89944353900845be36994b16
+    parentId: null
+    modified: 1637016485722
+    created: 1637016485722
+    name: Eligibility Estimator
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: env_f65b223ff7eb570e06f5561c0b50b79f2cdcb1ea
+    parentId: wrk_647b786b89944353900845be36994b16
+    modified: 1637016485732
+    created: 1637016485732
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1637016485732
+    _type: environment
+  - _id: jar_f65b223ff7eb570e06f5561c0b50b79f2cdcb1ea
+    parentId: wrk_647b786b89944353900845be36994b16
+    modified: 1637016485736
+    created: 1637016485736
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_6fb47a3f6731423bb3e8466047c5bd87
+    parentId: wrk_647b786b89944353900845be36994b16
+    modified: 1637016485728
+    created: 1637016485728
+    fileName: Eligibility Estimator
+    contents: ""
+    contentType: yaml
+    _type: api_spec
