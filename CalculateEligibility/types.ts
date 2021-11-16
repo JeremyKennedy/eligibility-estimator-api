@@ -20,19 +20,23 @@ export const RequestSchema = Joi.object({
   age: Joi.number().integer().required(),
   livingCountry: Joi.string(),
   birthCountry: Joi.string(),
+  legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
   yearsInCanadaSince18: Joi.number().integer(),
   inCountryWithAgreement: Joi.boolean(),
   maritalStatus: Joi.string().valid(...Object.values(MaritalStatusOptions)),
-  legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
+  partnerReceivingOas: Joi.boolean(),
+  income: Joi.number().integer(),
 });
 
 export interface CalculationParams {
   age?: number;
   livingCountry?: string;
+  legalStatus?: LegalStatusOptions;
   yearsInCanadaSince18?: number;
   inCountryWithAgreement?: boolean;
   maritalStatus?: MaritalStatusOptions;
-  legalStatus?: LegalStatusOptions;
+  partnerReceivingOas?: boolean;
+  income?: number;
 }
 
 export interface CalculationResult {
@@ -57,5 +61,7 @@ export enum ResultReasons {
   CITIZEN = `Not a Canadian citizen`,
   SOCIAL_AGREEMENT = 'Not in a country with a social agreement',
   MORE_INFO = 'Need more information...',
-  OAS='Not eligible for OAS'
+  OAS = 'Not eligible for OAS',
+  INCOME = 'Income too high',
+  INVALID = `Entered data is invalid`,
 }
