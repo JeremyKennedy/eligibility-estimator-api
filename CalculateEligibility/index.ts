@@ -3,6 +3,7 @@ import {
   CalculationParams,
   CalculationResult,
   LegalStatusOptions,
+  MaritalStatusOptions,
   RequestSchema,
   ResultOptions,
   ResultReasons,
@@ -30,17 +31,19 @@ const httpTrigger: AzureFunction = async function (
   context.log('Passed validation.');
 
   // processing
-  const result = getResult(value);
-  context.log('Result: ', result);
+  const resultOas = checkOas(value);
+  context.log('OAS Result: ', resultOas);
+  const resultGis = checkGis(value, resultOas.result);
+  context.log('GIS Result: ', resultOas);
 
   // completion
   context.res = {
     status: 200,
-    body: result,
+    body: { oas: resultOas, gis: resultGis },
   };
 };
 
-function getResult(value: CalculationParams): CalculationResult {
+function checkOas(value: CalculationParams): CalculationResult {
   const canadianCitizen = value.legalStatus
     ? [
         LegalStatusOptions.CANADIAN_CITIZEN,
@@ -93,14 +96,45 @@ function getResult(value: CalculationParams): CalculationResult {
       reason: ResultReasons.YEARS_IN_CANADA,
       detail: 'Depending on the agreement.',
     };
-  } else {
+  }
+  // fallback
+  return {
+    result: ResultOptions.MORE_INFO,
+    reason: ResultReasons.MORE_INFO,
+    detail:
+      'The information you have provided is not sufficient to provide an answer.',
+  };
+}
+
+function checkGis(
+  value: CalculationParams,
+  oasResult: ResultOptions
+): CalculationResult {
+  if (oasResult == ResultOptions.INELIGIBLE) {
+    return {
+      result: ResultOptions.INELIGIBLE,
+      reason: ResultReasons.OAS,
+      detail: 'You need to be eligible for OAS to be eligible for GIS.',
+    };
+  } else if (oasResult == ResultOptions.MORE_INFO) {
     return {
       result: ResultOptions.MORE_INFO,
       reason: ResultReasons.MORE_INFO,
       detail:
         'The information you have provided is not sufficient to provide an answer.',
     };
+  } else if (
+    value.maritalStatus == MaritalStatusOptions.MARRIED ||
+    value.maritalStatus == MaritalStatusOptions.COMMONLAW
+  ) {
   }
+  // fallback
+  return {
+    result: ResultOptions.MORE_INFO,
+    reason: ResultReasons.MORE_INFO,
+    detail:
+      'The information you have provided is not sufficient to provide an answer.',
+  };
 }
 
 export default httpTrigger;

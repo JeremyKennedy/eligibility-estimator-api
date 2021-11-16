@@ -57,4 +57,5 @@ export enum ResultReasons {
   CITIZEN = `Not a Canadian citizen`,
   SOCIAL_AGREEMENT = 'Not in a country with a social agreement',
   MORE_INFO = 'Need more information...',
+  OAS='Not eligible for OAS'
 }
