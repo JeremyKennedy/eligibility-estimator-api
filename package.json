@@ -7,14 +7,18 @@
     "watch": "tsc -w",
     "prestart": "npm run build",
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "jest --verbose"
   },
   "dependencies": {
     "joi": "^17.4.2"
   },
   "devDependencies": {
     "@azure/functions": "^2.0.0",
+    "@types/jest": "^27.0.2",
     "@types/joi": "^17.2.3",
+    "jest": "^27.3.1",
+    "stub-azure-function-context": "^2.0.0-alpha.6",
+    "ts-jest": "^27.0.7",
     "typescript": "^4.0.0"
   }
 }

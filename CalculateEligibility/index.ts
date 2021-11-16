@@ -11,11 +11,11 @@ const schema = Joi.object({
   inCountryWithAgreement: Joi.boolean(),
 });
 
-interface CalculationParams {
-  age: number;
-  canadianCitizen: boolean;
-  yearsInCanada: number;
-  inCountryWithAgreement: boolean;
+export interface CalculationParams {
+  age?: number;
+  canadianCitizen?: boolean;
+  yearsInCanada?: number;
+  inCountryWithAgreement?: boolean;
 }
 
 interface CalculationResult {
@@ -50,6 +50,7 @@ const httpTrigger: AzureFunction = async function (
 
   // completion
   context.res = {
+    status: 200,
     body: result,
   };
 };
