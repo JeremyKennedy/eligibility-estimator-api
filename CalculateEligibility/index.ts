@@ -55,10 +55,10 @@ const httpTrigger: AzureFunction = async function (
 };
 
 function getResult(value: CalculationParams): CalculationResult {
-  if (value.age < 65) {
+  if (value.age < 64) {
     return {
       result: `Not eligible!`,
-      detail: 'Age is below 65.',
+      detail: 'Age is below 64.',
     };
   } else if (value.canadianCitizen || value.yearsInCanada >= 20)
     return {
