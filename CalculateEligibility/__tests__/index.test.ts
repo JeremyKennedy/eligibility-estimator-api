@@ -1,9 +1,5 @@
-import {
-  createHttpTrigger,
-  runStubFunctionFromBindings,
-} from 'stub-azure-function-context';
-import httpTrigger from '../index';
-import { CalculationParams, ResultOptions } from '../types';
+import { ResultOptions } from '../types';
+import { mockedRequestFactory } from './factory';
 
 describe('eligibility estimator api', () => {
   it('fails on blank request', async () => {
@@ -24,26 +20,3 @@ describe('eligibility estimator api', () => {
     expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
   });
 });
-
-async function mockedRequestFactory(params: CalculationParams) {
-  return runStubFunctionFromBindings(
-    httpTrigger,
-    [
-      {
-        type: 'httpTrigger',
-        name: 'req',
-        direction: 'in',
-        data: createHttpTrigger(
-          'GET',
-          'http://example.com',
-          {},
-          {},
-          undefined,
-          params
-        ),
-      },
-      { type: 'http', name: 'res', direction: 'out' },
-    ],
-    new Date()
-  );
-}
