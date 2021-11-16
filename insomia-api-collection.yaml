@@ -1,18 +1,47 @@
 _type: export
 __export_format: 4
-__export_date: 2021-11-15T22:52:21.574Z
+__export_date: 2021-11-16T01:01:16.901Z
 __export_source: insomnia.desktop.app:v2021.6.0
 resources:
   - _id: req_320b3b1af08a488da76e09884291541f
     parentId: wrk_647b786b89944353900845be36994b16
-    modified: 1637016531942
+    modified: 1637024466237
     created: 1637016500982
     url: http://localhost:7071/api/CalculateEligibility
     name: Calculate Eligibility
     description: ""
     method: GET
     body: {}
-    parameters: []
+    parameters:
+      - id: pair_bcbd7d4a99584e1eacc5510003460d05
+        name: age
+        value: "65"
+        description: ""
+      - id: pair_c717e22e8f534dbda16997adaa83ac8f
+        name: livingCountry
+        value: Canada
+        description: ""
+        disabled: false
+      - id: pair_93bd3431733c43aaa679d0f8f5520115
+        name: birthCountry
+        value: Canada
+        description: ""
+        disabled: false
+      - id: pair_edb0b0cd789d444aa9bf92fc507a3a98
+        name: canadianCitizen
+        value: "true"
+        description: ""
+        disabled: false
+      - id: pair_7ca6c3586ec84fc799b1b4df1e6411d5
+        name: yearsInCanada
+        value: "20"
+        description: ""
+        disabled: false
+      - id: pair_d6c422a1d184423c8fc6e59260e80689
+        name: inCountryWithAgreement
+        value: "true"
+        description: ""
+        disabled: false
     headers: []
     authentication: {}
     metaSortKey: -1637016500982
