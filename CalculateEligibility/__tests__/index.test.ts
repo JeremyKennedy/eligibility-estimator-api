@@ -13,14 +13,14 @@ describe('sanity tests and error handling', () => {
   });
   it('accepts valid Marital Status', async () => {
     const { res } = await mockedRequestFactory({
-      age: 64,
+      age: 65,
       maritalStatus: MaritalStatusOptions.SINGLE,
     });
     expect(res.status).toEqual(200);
   });
   it('accepts valid Legal Status', async () => {
     const { res } = await mockedRequestFactory({
-      age: 64,
+      age: 65,
       legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
     });
     expect(res.status).toEqual(200);
@@ -29,13 +29,13 @@ describe('sanity tests and error handling', () => {
 
 describe('basic scenarios', () => {
   it('needs more infomation when only age provided', async () => {
-    const { res } = await mockedRequestFactory({ age: 64 });
+    const { res } = await mockedRequestFactory({ age: 65 });
     expect(res.status).toEqual(200);
     expect(res.body.result).toEqual(ResultOptions.MORE_INFO);
   });
 
-  it('returns ineligible when age below 64', async () => {
-    const { res } = await mockedRequestFactory({ age: 63 });
+  it('returns ineligible when age below 65', async () => {
+    const { res } = await mockedRequestFactory({ age: 64 });
     expect(res.status).toEqual(200);
     expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
   });

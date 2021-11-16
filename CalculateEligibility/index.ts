@@ -47,10 +47,10 @@ function getResult(value: CalculationParams): CalculationResult {
       ].includes(value.legalStatus)
     : undefined;
 
-  if (value.age < 64) {
+  if (value.age < 65) {
     return {
       result: ResultOptions.NOT_ELIGIBLE,
-      detail: 'Age is below 64.',
+      detail: 'Age is below 65.',
     };
   } else if (canadianCitizen || value.yearsInCanadaSince18 >= 20) {
     return {
