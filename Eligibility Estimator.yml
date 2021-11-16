@@ -1,13 +1,13 @@
 _type: export
 __export_format: 4
-__export_date: 2021-11-16T01:01:16.901Z
+__export_date: 2021-11-16T15:14:15.008Z
 __export_source: insomnia.desktop.app:v2021.6.0
 resources:
   - _id: req_320b3b1af08a488da76e09884291541f
     parentId: wrk_647b786b89944353900845be36994b16
-    modified: 1637024466237
+    modified: 1637075111430
     created: 1637016500982
-    url: http://localhost:7071/api/CalculateEligibility
+    url: "{{host}}/api/CalculateEligibility"
     name: Calculate Eligibility
     description: ""
     method: GET
@@ -34,7 +34,7 @@ resources:
         disabled: false
       - id: pair_7ca6c3586ec84fc799b1b4df1e6411d5
         name: yearsInCanada
-        value: "20"
+        value: "200"
         description: ""
         disabled: false
       - id: pair_d6c422a1d184423c8fc6e59260e80689
@@ -63,11 +63,12 @@ resources:
     _type: workspace
   - _id: env_f65b223ff7eb570e06f5561c0b50b79f2cdcb1ea
     parentId: wrk_647b786b89944353900845be36994b16
-    modified: 1637016485732
+    modified: 1637025006739
     created: 1637016485732
     name: Base Environment
-    data: {}
-    dataPropertyOrder: null
+    data:
+      - {}
+    dataPropertyOrder: {}
     color: null
     isPrivate: false
     metaSortKey: 1637016485732
@@ -87,3 +88,31 @@ resources:
     contents: ""
     contentType: yaml
     _type: api_spec
+  - _id: env_d13a93713d5942c0bb689535a6835f7b
+    parentId: env_f65b223ff7eb570e06f5561c0b50b79f2cdcb1ea
+    modified: 1637074339482
+    created: 1637074294069
+    name: Local
+    data:
+      host: http://localhost:7071
+    dataPropertyOrder:
+      "&":
+        - host
+    color: null
+    isPrivate: false
+    metaSortKey: 1637074294069
+    _type: environment
+  - _id: env_da5afe2ff0bf43debb4156688c9d6bee
+    parentId: env_f65b223ff7eb570e06f5561c0b50b79f2cdcb1ea
+    modified: 1637074371567
+    created: 1637074340686
+    name: Prod
+    data:
+      host: https://eligibilityestimatorapi.azurewebsites.net
+    dataPropertyOrder:
+      "&":
+        - host
+    color: null
+    isPrivate: false
+    metaSortKey: 1637074294119
+    _type: environment
