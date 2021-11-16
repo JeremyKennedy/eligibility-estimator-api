@@ -28,6 +28,7 @@ export const RequestSchema = Joi.object({
 
 export interface CalculationParams {
   age?: number;
+  livingCountry?: string;
   yearsInCanadaSince18?: number;
   inCountryWithAgreement?: boolean;
   maritalStatus?: MaritalStatusOptions;

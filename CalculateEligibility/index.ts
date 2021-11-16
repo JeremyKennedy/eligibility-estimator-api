@@ -47,16 +47,25 @@ function getResult(value: CalculationParams): CalculationResult {
       ].includes(value.legalStatus)
     : undefined;
 
-  if (canadianCitizen || value.yearsInCanadaSince18 >= 20) {
-    if (value.age < 65) {
-      return {
-        result: ResultOptions.ELIGIBLE_WHEN_65,
-        detail: 'You will be eligible when you turn 65.',
-      };
+  const requiredYearsInCanada = value.livingCountry === 'Canada' ? 10 : 20;
+
+  if (canadianCitizen) {
+    if (value.yearsInCanadaSince18 >= requiredYearsInCanada) {
+      if (value.age >= 65) {
+        return {
+          result: ResultOptions.ELIGIBLE,
+          detail: 'Next, see if you are eligible for GIS!',
+        };
+      } else {
+        return {
+          result: ResultOptions.ELIGIBLE_WHEN_65,
+          detail: 'You will be eligible when you turn 65.',
+        };
+      }
     } else {
       return {
-        result: ResultOptions.ELIGIBLE,
-        detail: 'Next, see if you are eligible for GIS!',
+        result: ResultOptions.INELIGIBLE,
+        detail: `Need to live in Canada more than ${requiredYearsInCanada} years.`,
       };
     }
   } else if (canadianCitizen == false) {
@@ -69,7 +78,10 @@ function getResult(value: CalculationParams): CalculationResult {
       result: ResultOptions.INELIGIBLE,
       detail: 'Not in a country with a social security agreement.',
     };
-  } else if (value.inCountryWithAgreement && value.yearsInCanadaSince18 < 20) {
+  } else if (
+    value.inCountryWithAgreement &&
+    value.yearsInCanadaSince18 < requiredYearsInCanada
+  ) {
     return {
       result: ResultOptions.CONDITIONAL,
       detail: 'Depending on the agreement.',
