@@ -1,27 +1,10 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions';
-
-import Joi = require('joi');
-
-const schema = Joi.object({
-  age: Joi.number().integer().required(),
-  livingCountry: Joi.string(),
-  birthCountry: Joi.string(),
-  canadianCitizen: Joi.boolean(),
-  yearsInCanada: Joi.number().integer(),
-  inCountryWithAgreement: Joi.boolean(),
-});
-
-export interface CalculationParams {
-  age?: number;
-  canadianCitizen?: boolean;
-  yearsInCanada?: number;
-  inCountryWithAgreement?: boolean;
-}
-
-interface CalculationResult {
-  result: String;
-  detail: String;
-}
+import {
+  CalculationParams,
+  CalculationResult,
+  RequestSchema,
+  ResultOptions,
+} from './types';
 
 const httpTrigger: AzureFunction = async function (
   context: Context,
@@ -30,12 +13,12 @@ const httpTrigger: AzureFunction = async function (
   context.log(`Processing request: `, req.query);
 
   // validation
-  const { error, value } = schema.validate(req.query);
+  const { error, value } = RequestSchema.validate(req.query);
   if (error) {
     context.res = {
       status: 400,
       body: {
-        error: `Request is invalid!`,
+        error: ResultOptions.INVALID,
         detail: error.details,
       },
     };
@@ -58,32 +41,32 @@ const httpTrigger: AzureFunction = async function (
 function getResult(value: CalculationParams): CalculationResult {
   if (value.age < 64) {
     return {
-      result: `Not eligible!`,
+      result: ResultOptions.NOT_ELIGIBLE,
       detail: 'Age is below 64.',
     };
   } else if (value.canadianCitizen || value.yearsInCanada >= 20)
     return {
-      result: `Eligible!`,
+      result: ResultOptions.ELIGIBLE,
       detail: 'Next, see if you are eligible for GIS!',
     };
   else if (value.canadianCitizen == false) {
     return {
-      result: `Not eligible!`,
+      result: ResultOptions.NOT_ELIGIBLE,
       detail: 'Not Canadian citizen.',
     };
   } else if (value.inCountryWithAgreement == false) {
     return {
-      result: `Not eligible!`,
+      result: ResultOptions.NOT_ELIGIBLE,
       detail: 'Not in a country with a social security agreement.',
     };
   } else if (value.inCountryWithAgreement && value.yearsInCanada < 20)
     return {
-      result: `Conditionally eligible...`,
+      result: ResultOptions.CONDITIONAL,
       detail: 'Depending on the agreement.',
     };
   else {
     return {
-      result: 'Need more information...',
+      result: ResultOptions.MORE_INFO,
       detail:
         'The information you have provided is not sufficient to provide an answer.',
     };
