@@ -40,8 +40,9 @@ export interface CalculationResult {
 }
 
 export enum ResultOptions {
-  NOT_ELIGIBLE = `Not eligible!`,
   ELIGIBLE = `Eligible!`,
+  ELIGIBLE_WHEN_65 = `Eligible when 65.`,
+  INELIGIBLE = `Ineligible!`,
   CONDITIONAL = `Conditionally eligible...`,
   MORE_INFO = 'Need more information...',
   INVALID = 'Request is invalid!',
