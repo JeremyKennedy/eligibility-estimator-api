@@ -37,6 +37,7 @@ export interface CalculationParams {
 
 export interface CalculationResult {
   result: ResultOptions;
+  reason: ResultReasons;
   detail: String;
 }
 
@@ -47,4 +48,13 @@ export enum ResultOptions {
   CONDITIONAL = `Conditionally eligible...`,
   MORE_INFO = 'Need more information...',
   INVALID = 'Request is invalid!',
+}
+
+export enum ResultReasons {
+  NONE = `You meet the criteria`,
+  AGE = `Not yet 65`,
+  YEARS_IN_CANADA = `Not enough years in Canada`,
+  CITIZEN = `Not a Canadian citizen`,
+  SOCIAL_AGREEMENT = 'Not in a country with a social agreement',
+  MORE_INFO = 'Need more information...',
 }
