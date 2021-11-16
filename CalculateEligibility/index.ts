@@ -44,7 +44,7 @@ function getResult(value: CalculationParams): CalculationResult {
       result: ResultOptions.NOT_ELIGIBLE,
       detail: 'Age is below 64.',
     };
-  } else if (value.canadianCitizen || value.yearsInCanada >= 20)
+  } else if (value.canadianCitizen || value.yearsInCanadaSince18 >= 20)
     return {
       result: ResultOptions.ELIGIBLE,
       detail: 'Next, see if you are eligible for GIS!',
@@ -59,7 +59,7 @@ function getResult(value: CalculationParams): CalculationResult {
       result: ResultOptions.NOT_ELIGIBLE,
       detail: 'Not in a country with a social security agreement.',
     };
-  } else if (value.inCountryWithAgreement && value.yearsInCanada < 20)
+  } else if (value.inCountryWithAgreement && value.yearsInCanadaSince18 < 20)
     return {
       result: ResultOptions.CONDITIONAL,
       detail: 'Depending on the agreement.',

@@ -1,11 +1,11 @@
 _type: export
 __export_format: 4
-__export_date: 2021-11-16T15:14:15.008Z
+__export_date: 2021-11-16T19:46:14.339Z
 __export_source: insomnia.desktop.app:v2021.6.0
 resources:
   - _id: req_320b3b1af08a488da76e09884291541f
     parentId: wrk_647b786b89944353900845be36994b16
-    modified: 1637075111430
+    modified: 1637091971407
     created: 1637016500982
     url: "{{host}}/api/CalculateEligibility"
     name: Calculate Eligibility
@@ -33,8 +33,8 @@ resources:
         description: ""
         disabled: false
       - id: pair_7ca6c3586ec84fc799b1b4df1e6411d5
-        name: yearsInCanada
-        value: "200"
+        name: yearsInCanadaSince18
+        value: "20"
         description: ""
         disabled: false
       - id: pair_d6c422a1d184423c8fc6e59260e80689

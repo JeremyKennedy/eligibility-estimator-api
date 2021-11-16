@@ -5,14 +5,14 @@ export const RequestSchema = Joi.object({
   livingCountry: Joi.string(),
   birthCountry: Joi.string(),
   canadianCitizen: Joi.boolean(),
-  yearsInCanada: Joi.number().integer(),
+  yearsInCanadaSince18: Joi.number().integer(),
   inCountryWithAgreement: Joi.boolean(),
 });
 
 export interface CalculationParams {
   age?: number;
   canadianCitizen?: boolean;
-  yearsInCanada?: number;
+  yearsInCanadaSince18?: number;
   inCountryWithAgreement?: boolean;
 }
 
