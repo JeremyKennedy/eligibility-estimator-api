@@ -1,11 +1,11 @@
 _type: export
 __export_format: 4
-__export_date: 2021-11-16T19:46:14.339Z
+__export_date: 2021-11-16T23:34:43.914Z
 __export_source: insomnia.desktop.app:v2021.6.0
 resources:
   - _id: req_320b3b1af08a488da76e09884291541f
     parentId: wrk_647b786b89944353900845be36994b16
-    modified: 1637091971407
+    modified: 1637105680878
     created: 1637016500982
     url: "{{host}}/api/CalculateEligibility"
     name: Calculate Eligibility
@@ -22,14 +22,14 @@ resources:
         value: Canada
         description: ""
         disabled: false
+      - id: pair_c1c801ab23e94a6b91e67469d60196d9
+        name: legalStatus
+        value: Canadian Citizen
+        description: ""
+        disabled: false
       - id: pair_93bd3431733c43aaa679d0f8f5520115
         name: birthCountry
         value: Canada
-        description: ""
-        disabled: false
-      - id: pair_edb0b0cd789d444aa9bf92fc507a3a98
-        name: canadianCitizen
-        value: "true"
         description: ""
         disabled: false
       - id: pair_7ca6c3586ec84fc799b1b4df1e6411d5
@@ -42,6 +42,19 @@ resources:
         value: "true"
         description: ""
         disabled: false
+      - id: pair_1090299521d34ff8a5bcd8fa66e4fa26
+        name: maritalStatus
+        value: Married
+        description: ""
+        disabled: false
+      - id: pair_cb0060ac71a94c71b8871d14fd19db91
+        name: partnerReceivingOas
+        value: "true"
+        description: ""
+      - id: pair_7500776b2e6b41b9b2734b04c019776b
+        name: income
+        value: "10000"
+        description: ""
     headers: []
     authentication: {}
     metaSortKey: -1637016500982
