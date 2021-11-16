@@ -43,7 +43,7 @@ describe('basic scenarios', () => {
   it('returns ineligible when not citizen', async () => {
     const { res } = await mockedRequestFactory({
       age: 65,
-      canadianCitizen: false,
+      legalStatus: LegalStatusOptions.TEMPORARY_RESIDENT,
     });
     expect(res.status).toEqual(200);
     expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
@@ -73,7 +73,6 @@ describe('personas', () => {
   it('Miriam Krayem: ineligible due to age', async () => {
     const { res } = await mockedRequestFactory({
       age: 55,
-      canadianCitizen: true,
       yearsInCanadaSince18: 30,
       maritalStatus: MaritalStatusOptions.DIVORCED,
       legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
@@ -84,7 +83,6 @@ describe('personas', () => {
   it('Adam Smith: ineligible due to age', async () => {
     const { res } = await mockedRequestFactory({
       age: 62,
-      canadianCitizen: true,
       yearsInCanadaSince18: 15,
       maritalStatus: MaritalStatusOptions.WIDOWED,
       legalStatus: LegalStatusOptions.PERMANENT_RESIDENT,
@@ -95,7 +93,6 @@ describe('personas', () => {
   it('Habon Aden: eligible', async () => {
     const { res } = await mockedRequestFactory({
       age: 65,
-      canadianCitizen: true,
       yearsInCanadaSince18: 18,
       maritalStatus: MaritalStatusOptions.SINGLE,
       legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
@@ -106,7 +103,6 @@ describe('personas', () => {
   it('Tanu Singh: eligible', async () => {
     const { res } = await mockedRequestFactory({
       age: 66,
-      canadianCitizen: true,
       yearsInCanadaSince18: 65,
       maritalStatus: MaritalStatusOptions.MARRIED,
       legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
