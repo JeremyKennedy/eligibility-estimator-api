@@ -19,4 +19,32 @@ describe('eligibility estimator api', () => {
     expect(res.status).toEqual(200);
     expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
   });
+
+  it('returns ineligible when not citizen', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      canadianCitizen: false,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
+  });
+
+  it('returns ineligible country has no social agreement', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      inCountryWithAgreement: false,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
+  });
+
+  it('returns conditionally eligible when social agreement and under 20 years in Canada', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      inCountryWithAgreement: true,
+      yearsInCanadaSince18: 19,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.body.result).toEqual(ResultOptions.CONDITIONAL);
+  });
 });
