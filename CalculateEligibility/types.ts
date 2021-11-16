@@ -1,5 +1,21 @@
 import Joi = require('joi');
 
+export enum MaritalStatusOptions {
+  SINGLE = 'Single',
+  MARRIED = 'Married',
+  COMMONLAW = 'Common-law',
+  WIDOWED = 'Widowed',
+  DIVORCED = 'Divorced',
+  SEPERATED = 'Seperated',
+}
+
+export enum LegalStatusOptions {
+  CANADIAN_CITIZEN = 'Canadian Citizen',
+  PERMANENT_RESIDENT = 'Permanent Resident',
+  STATUS_INDIAN = 'Status Indian',
+  TEMPORARY_RESIDENT = 'Temporary Resident',
+}
+
 export const RequestSchema = Joi.object({
   age: Joi.number().integer().required(),
   livingCountry: Joi.string(),
@@ -7,6 +23,8 @@ export const RequestSchema = Joi.object({
   canadianCitizen: Joi.boolean(),
   yearsInCanadaSince18: Joi.number().integer(),
   inCountryWithAgreement: Joi.boolean(),
+  maritalStatus: Joi.string().valid(...Object.values(MaritalStatusOptions)),
+  legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
 });
 
 export interface CalculationParams {
@@ -14,6 +32,8 @@ export interface CalculationParams {
   canadianCitizen?: boolean;
   yearsInCanadaSince18?: number;
   inCountryWithAgreement?: boolean;
+  maritalStatus?: MaritalStatusOptions;
+  legalStatus?: LegalStatusOptions;
 }
 
 export interface CalculationResult {

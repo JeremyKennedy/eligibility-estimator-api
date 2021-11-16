@@ -1,13 +1,33 @@
-import { ResultOptions } from '../types';
+import {
+  LegalStatusOptions,
+  MaritalStatusOptions,
+  ResultOptions,
+} from '../types';
 import { mockedRequestFactory } from './factory';
 
-describe('eligibility estimator api', () => {
+describe('sanity tests and error handling', () => {
   it('fails on blank request', async () => {
     const { res } = await mockedRequestFactory({});
     expect(res.status).toEqual(400);
     expect(res.body.error).toEqual(ResultOptions.INVALID);
   });
+  it('accepts valid Marital Status', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 64,
+      maritalStatus: MaritalStatusOptions.SINGLE,
+    });
+    expect(res.status).toEqual(200);
+  });
+  it('accepts valid Legal Status', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 64,
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+    });
+    expect(res.status).toEqual(200);
+  });
+});
 
+describe('basic scenarios', () => {
   it('needs more infomation when only age provided', async () => {
     const { res } = await mockedRequestFactory({ age: 64 });
     expect(res.status).toEqual(200);
@@ -46,5 +66,52 @@ describe('eligibility estimator api', () => {
     });
     expect(res.status).toEqual(200);
     expect(res.body.result).toEqual(ResultOptions.CONDITIONAL);
+  });
+});
+
+describe('personas', () => {
+  it('Miriam Krayem: ineligible due to age', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 55,
+      canadianCitizen: true,
+      yearsInCanadaSince18: 30,
+      maritalStatus: MaritalStatusOptions.DIVORCED,
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
+  });
+  it('Adam Smith: ineligible due to age', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 62,
+      canadianCitizen: true,
+      yearsInCanadaSince18: 15,
+      maritalStatus: MaritalStatusOptions.WIDOWED,
+      legalStatus: LegalStatusOptions.PERMANENT_RESIDENT,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.body.result).toEqual(ResultOptions.NOT_ELIGIBLE);
+  });
+  it('Habon Aden: eligible', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      canadianCitizen: true,
+      yearsInCanadaSince18: 18,
+      maritalStatus: MaritalStatusOptions.SINGLE,
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.body.result).toEqual(ResultOptions.ELIGIBLE);
+  });
+  it('Tanu Singh: eligible', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 66,
+      canadianCitizen: true,
+      yearsInCanadaSince18: 65,
+      maritalStatus: MaritalStatusOptions.MARRIED,
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.body.result).toEqual(ResultOptions.ELIGIBLE);
   });
 });
