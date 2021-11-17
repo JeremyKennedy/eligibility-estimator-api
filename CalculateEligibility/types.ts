@@ -17,7 +17,7 @@ export enum LegalStatusOptions {
 }
 
 export const RequestSchema = Joi.object({
-  age: Joi.number().integer().required(),
+  age: Joi.number().integer().max(150).required(),
   livingCountry: Joi.string(),
   birthCountry: Joi.string(),
   legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
