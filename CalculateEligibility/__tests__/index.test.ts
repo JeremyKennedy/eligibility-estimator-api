@@ -69,7 +69,7 @@ describe('basic scenarios', () => {
     expect(res.body.gis.result).toEqual(ResultOptions.INELIGIBLE);
     expect(res.body.gis.reason).toEqual(ResultReasons.OAS);
   });
-  it('returns "ineligible" when country has no social agreement', async () => {
+  it('returns "ineligible" when living in No Agreement', async () => {
     const { res } = await mockedRequestFactory({
       age: 65,
       livingCountry: 'No Agreement',
@@ -93,7 +93,7 @@ describe('basic scenarios', () => {
 });
 
 describe('basic OAS scenarios', () => {
-  it('returns "conditionally eligible" when social agreement and under 20 years in Canada', async () => {
+  it('returns "conditionally eligible" when living in Agreement and under 20 years in Canada', async () => {
     const { res } = await mockedRequestFactory({
       age: 65,
       yearsInCanadaSince18: 19,
@@ -314,6 +314,21 @@ describe('thorough extras', () => {
     expect(res.body.oas.reason).toEqual(ResultReasons.YEARS_IN_CANADA);
     expect(res.body.gis.result).toEqual(ResultOptions.INELIGIBLE);
     expect(res.body.gis.reason).toEqual(ResultReasons.OAS);
+  });
+  it('returns "conditionally eligible" when living in Agreement and 9 years in Canada', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      livingCountry: 'Agreement',
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+      yearsInCanadaSince18: 9,
+      maritalStatus: MaritalStatusOptions.SINGLE,
+      partnerReceivingOas: undefined,
+      income: undefined,
+    });
+    expect(res.body.oas.result).toEqual(ResultOptions.CONDITIONAL);
+    expect(res.body.oas.reason).toEqual(ResultReasons.YEARS_IN_CANADA);
+    expect(res.body.gis.result).toEqual(ResultOptions.MORE_INFO);
+    expect(res.body.gis.reason).toEqual(ResultReasons.MORE_INFO);
   });
   it('returns "eligible" when living in Canada and 10 years in Canada', async () => {
     const { res } = await mockedRequestFactory({
