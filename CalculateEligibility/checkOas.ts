@@ -1,3 +1,4 @@
+import getIsAgreementCountry from './helpers/socialAgreement';
 import {
   CalculationParams,
   CalculationResult,
@@ -18,6 +19,9 @@ export default function checkOas(value: CalculationParams): CalculationResult {
     : undefined;
 
   const requiredYearsInCanada = value.livingCountry === 'Canada' ? 10 : 20;
+  const inCountryWithAgreement = value.livingCountry
+    ? getIsAgreementCountry(value.livingCountry)
+    : undefined;
 
   // main checks
   if (canadianCitizen && value.yearsInCanadaSince18 >= requiredYearsInCanada) {
@@ -35,7 +39,7 @@ export default function checkOas(value: CalculationParams): CalculationResult {
       };
     }
   } else if (
-    value.inCountryWithAgreement &&
+    inCountryWithAgreement &&
     value.yearsInCanadaSince18 < requiredYearsInCanada
   ) {
     return {
@@ -55,7 +59,7 @@ export default function checkOas(value: CalculationParams): CalculationResult {
       reason: ResultReasons.CITIZEN,
       detail: 'Not Canadian citizen.',
     };
-  } else if (value.inCountryWithAgreement == false) {
+  } else if (inCountryWithAgreement == false) {
     return {
       result: ResultOptions.INELIGIBLE,
       reason: ResultReasons.SOCIAL_AGREEMENT,

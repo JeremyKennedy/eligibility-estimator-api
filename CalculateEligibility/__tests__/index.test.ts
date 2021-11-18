@@ -61,7 +61,7 @@ describe('basic scenarios', () => {
   it('returns "ineligible" when country has no social agreement', async () => {
     const { res } = await mockedRequestFactory({
       age: 65,
-      inCountryWithAgreement: false,
+      livingCountry: "No Agreement",
     });
     expect(res.body.oas.result).toEqual(ResultOptions.INELIGIBLE);
     expect(res.body.oas.reason).toEqual(ResultReasons.SOCIAL_AGREEMENT);
@@ -86,7 +86,7 @@ describe('basic OAS scenarios', () => {
     const { res } = await mockedRequestFactory({
       age: 65,
       yearsInCanadaSince18: 19,
-      inCountryWithAgreement: true,
+      livingCountry: "Agreement",
     });
     expect(res.body.oas.result).toEqual(ResultOptions.CONDITIONAL);
     expect(res.body.oas.reason).toEqual(ResultReasons.YEARS_IN_CANADA);
@@ -244,8 +244,7 @@ describe('thorough personas', () => {
   it('Habon Aden: OAS conditionally eligible, GIS ineligible due to income', async () => {
     const { res } = await mockedRequestFactory({
       age: 66,
-      livingCountry: 'Not Canada',
-      inCountryWithAgreement: true,
+      livingCountry: 'Jamaica',
       legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
       yearsInCanadaSince18: 18,
       maritalStatus: MaritalStatusOptions.SINGLE,

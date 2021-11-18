@@ -23,7 +23,6 @@ export const RequestSchema = Joi.object({
   birthCountry: Joi.string(),
   legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
   yearsInCanadaSince18: Joi.number().integer(),
-  inCountryWithAgreement: Joi.boolean(),
   maritalStatus: Joi.string().valid(...Object.values(MaritalStatusOptions)),
   partnerReceivingOas: Joi.boolean(),
   income: Joi.number().integer(),
@@ -34,7 +33,6 @@ export interface CalculationParams {
   livingCountry?: string;
   legalStatus?: LegalStatusOptions;
   yearsInCanadaSince18?: number;
-  inCountryWithAgreement?: boolean;
   maritalStatus?: MaritalStatusOptions;
   partnerReceivingOas?: boolean;
   income?: number;
