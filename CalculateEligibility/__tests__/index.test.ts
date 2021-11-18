@@ -34,15 +34,26 @@ describe('sanity checks', () => {
 });
 
 describe('basic scenarios', () => {
-  it('returns "needs more infomation" when only age 65 provided', async () => {
+  it('returns "needs more info" when only age 65 provided', async () => {
     const { res } = await mockedRequestFactory({ age: 65 });
     expect(res.body.oas.result).toEqual(ResultOptions.MORE_INFO);
     expect(res.body.oas.reason).toEqual(ResultReasons.MORE_INFO);
     expect(res.body.gis.result).toEqual(ResultOptions.MORE_INFO);
     expect(res.body.gis.reason).toEqual(ResultReasons.MORE_INFO);
   });
-  it('returns "needs more infomation" when only age 64 provided', async () => {
+  it('returns "needs more info" when only age 64 provided', async () => {
     const { res } = await mockedRequestFactory({ age: 64 });
+    expect(res.body.oas.result).toEqual(ResultOptions.MORE_INFO);
+    expect(res.body.oas.reason).toEqual(ResultReasons.MORE_INFO);
+    expect(res.body.gis.result).toEqual(ResultOptions.MORE_INFO);
+    expect(res.body.gis.reason).toEqual(ResultReasons.MORE_INFO);
+  });
+  it('returns "needs more info" when only age/country/legal provided', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      livingCountry: 'Canada',
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+    });
     expect(res.body.oas.result).toEqual(ResultOptions.MORE_INFO);
     expect(res.body.oas.reason).toEqual(ResultReasons.MORE_INFO);
     expect(res.body.gis.result).toEqual(ResultOptions.MORE_INFO);
@@ -61,7 +72,7 @@ describe('basic scenarios', () => {
   it('returns "ineligible" when country has no social agreement', async () => {
     const { res } = await mockedRequestFactory({
       age: 65,
-      livingCountry: "No Agreement",
+      livingCountry: 'No Agreement',
     });
     expect(res.body.oas.result).toEqual(ResultOptions.INELIGIBLE);
     expect(res.body.oas.reason).toEqual(ResultReasons.SOCIAL_AGREEMENT);
@@ -86,7 +97,7 @@ describe('basic OAS scenarios', () => {
     const { res } = await mockedRequestFactory({
       age: 65,
       yearsInCanadaSince18: 19,
-      livingCountry: "Agreement",
+      livingCountry: 'Agreement',
     });
     expect(res.body.oas.result).toEqual(ResultOptions.CONDITIONAL);
     expect(res.body.oas.reason).toEqual(ResultReasons.YEARS_IN_CANADA);

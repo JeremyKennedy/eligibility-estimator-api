@@ -1,4 +1,5 @@
 export default function getIsAgreementCountry(country: string): boolean {
+  if (country === 'Canada') return undefined;
   return AGREEMENT_COUNTRIES.includes(country);
 }
 
