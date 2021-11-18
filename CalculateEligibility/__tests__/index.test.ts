@@ -226,6 +226,37 @@ describe('basic GIS scenarios', () => {
 });
 
 describe('thorough personas', () => {
+  it('Tanu Singh: OAS eligible, GIS eligible', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      livingCountry: 'Canada',
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+      yearsInCanadaSince18: 47,
+      maritalStatus: MaritalStatusOptions.MARRIED,
+      partnerReceivingOas: true,
+      income: 17000,
+    });
+    expect(res.body.oas.result).toEqual(ResultOptions.ELIGIBLE);
+    expect(res.body.oas.reason).toEqual(ResultReasons.NONE);
+    expect(res.body.gis.result).toEqual(ResultOptions.ELIGIBLE);
+    expect(res.body.gis.reason).toEqual(ResultReasons.NONE);
+  });
+  it('Habon Aden: OAS conditionally eligible, GIS ineligible due to income', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 66,
+      livingCountry: 'Not Canada',
+      inCountryWithAgreement: true,
+      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
+      yearsInCanadaSince18: 18,
+      maritalStatus: MaritalStatusOptions.SINGLE,
+      partnerReceivingOas: undefined,
+      income: 28000,
+    });
+    expect(res.body.oas.result).toEqual(ResultOptions.CONDITIONAL);
+    expect(res.body.oas.reason).toEqual(ResultReasons.YEARS_IN_CANADA);
+    expect(res.body.gis.result).toEqual(ResultOptions.INELIGIBLE);
+    expect(res.body.gis.reason).toEqual(ResultReasons.INCOME);
+  });
   it('Miriam Krayem: OAS eligible when 65, GIS ineligible due to income', async () => {
     const { res } = await mockedRequestFactory({
       age: 55,
@@ -255,37 +286,6 @@ describe('thorough personas', () => {
     expect(res.body.oas.reason).toEqual(ResultReasons.AGE);
     expect(res.body.gis.result).toEqual(ResultOptions.INELIGIBLE);
     expect(res.body.gis.reason).toEqual(ResultReasons.INCOME);
-  });
-  it('Habon Aden: OAS conditionally eligible, GIS ineligible due to income', async () => {
-    const { res } = await mockedRequestFactory({
-      age: 66,
-      livingCountry: 'Not Canada',
-      inCountryWithAgreement: true,
-      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
-      yearsInCanadaSince18: 18,
-      maritalStatus: MaritalStatusOptions.SINGLE,
-      partnerReceivingOas: undefined,
-      income: 28000,
-    });
-    expect(res.body.oas.result).toEqual(ResultOptions.CONDITIONAL);
-    expect(res.body.oas.reason).toEqual(ResultReasons.YEARS_IN_CANADA);
-    expect(res.body.gis.result).toEqual(ResultOptions.INELIGIBLE);
-    expect(res.body.gis.reason).toEqual(ResultReasons.INCOME);
-  });
-  it('Tanu Singh: OAS eligible, GIS eligible', async () => {
-    const { res } = await mockedRequestFactory({
-      age: 65,
-      livingCountry: 'Canada',
-      legalStatus: LegalStatusOptions.CANADIAN_CITIZEN,
-      yearsInCanadaSince18: 47,
-      maritalStatus: MaritalStatusOptions.MARRIED,
-      partnerReceivingOas: true,
-      income: 17000,
-    });
-    expect(res.body.oas.result).toEqual(ResultOptions.ELIGIBLE);
-    expect(res.body.oas.reason).toEqual(ResultReasons.NONE);
-    expect(res.body.gis.result).toEqual(ResultOptions.ELIGIBLE);
-    expect(res.body.gis.reason).toEqual(ResultReasons.NONE);
   });
 });
 
