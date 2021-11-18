@@ -45,25 +45,27 @@ export default function checkOas(value: CalculationParams): CalculationResult {
     return {
       result: ResultOptions.CONDITIONAL,
       reason: ResultReasons.YEARS_IN_CANADA,
-      detail: 'Depending on the agreement.',
+      detail:
+        "Depending on Canada's agreement with this country, you. may be eligible to receive the OAS pension.",
     };
   } else if (value.yearsInCanadaSince18 < requiredYearsInCanada) {
     return {
       result: ResultOptions.INELIGIBLE,
       reason: ResultReasons.YEARS_IN_CANADA,
-      detail: `Need to live in Canada more than ${requiredYearsInCanada} years.`,
+      detail: `You currently do not appear to be eligible for the OAS pension as you have indicated that you have not lived in Canada for the minimum period of time or lived in a country that Canada has a social security agreement with. However, you may be in the future if you reside in Canada for the minimum required number of years.`,
     };
   } else if (canadianCitizen == false) {
     return {
       result: ResultOptions.INELIGIBLE,
       reason: ResultReasons.CITIZEN,
-      detail: 'Not Canadian citizen.',
+      detail: 'You currently do not appear to be eligible for the OAS pension as you have indicated that you do not have legal status in Canada. However, you may be in the future if you obtain legal status. If you are living outside of Canada, you may be eligible for the OAS pension if you had legal status prior to your departure.',
     };
   } else if (inCountryWithAgreement == false) {
     return {
       result: ResultOptions.INELIGIBLE,
       reason: ResultReasons.SOCIAL_AGREEMENT,
-      detail: 'Not in a country with a social security agreement.',
+      detail:
+        'You currently do not appear to be eligible for the OAS pension as you have indicated that you have not lived in Canada for the minimum period of time or lived in a country that Canada has a social security agreement with. However, you may be in the future if you reside in Canada for the minimum required number of years.',
     };
   }
   // fallback
