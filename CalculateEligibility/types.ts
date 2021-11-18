@@ -14,6 +14,7 @@ export enum LegalStatusOptions {
   PERMANENT_RESIDENT = 'Permanent Resident',
   STATUS_INDIAN = 'Status Indian',
   TEMPORARY_RESIDENT = 'Temporary Resident',
+  NONE = 'None of the above',
 }
 
 export const RequestSchema = Joi.object({
