@@ -17,6 +17,25 @@ describe('sanity checks', () => {
     expect(res.status).toEqual(400);
     expect(res.body.error).toEqual(ResultOptions.INVALID);
   });
+  it('accepts age equal to 150', async () => {
+    const { res } = await mockedRequestFactory({ age: 150 });
+    expect(res.status).toEqual(200);
+  });
+  it('fails when years in Canada is greater than age minus 18', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      yearsInCanadaSince18: 48,
+    });
+    expect(res.status).toEqual(400);
+    expect(res.body.error).toEqual(ResultOptions.INVALID);
+  });
+  it('accepts when years in Canada is equal to age minus 18', async () => {
+    const { res } = await mockedRequestFactory({
+      age: 65,
+      yearsInCanadaSince18: 47,
+    });
+    expect(res.status).toEqual(200);
+  });
   it('accepts valid Marital Status', async () => {
     const { res } = await mockedRequestFactory({
       age: 65,

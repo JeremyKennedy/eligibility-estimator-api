@@ -22,7 +22,9 @@ export const RequestSchema = Joi.object({
   livingCountry: Joi.string(),
   birthCountry: Joi.string(),
   legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
-  yearsInCanadaSince18: Joi.number().integer(),
+  yearsInCanadaSince18: Joi.number()
+    .max(Joi.ref('age', { adjust: (age) => age - 18 }))
+    .integer(),
   maritalStatus: Joi.string().valid(...Object.values(MaritalStatusOptions)),
   partnerReceivingOas: Joi.boolean(),
   income: Joi.number().integer(),
