@@ -37,7 +37,9 @@ export function validateRequestForBenefit(
       result: {
         result: ResultOptions.MORE_INFO,
         reason: ResultReasons.MORE_INFO,
-        detail: `Missing fields: [${missingFields}]`,
+        detail: `Missing ${missingFields.length} required field${
+          missingFields.length != 1 ? 's' : ''
+        }.`,
         missingFields: missingFields,
       },
       value: null,
