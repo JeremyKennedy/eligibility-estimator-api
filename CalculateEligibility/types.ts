@@ -39,6 +39,7 @@ export enum ResultReasons {
 }
 
 // this is what the API expects to receive
+// don't forget to update OpenAPI!
 export const RequestSchema = Joi.object({
   age: Joi.number().integer().max(150),
   livingCountry: Joi.string(),
@@ -46,7 +47,7 @@ export const RequestSchema = Joi.object({
   yearsInCanadaSince18: Joi.number()
     .integer()
     .ruleset.max(Joi.ref('age', { adjust: (age) => age - 18 }))
-    .message('Years in Canada should be no more than age minus 18.'),
+    .message('Years in Canada should be no more than age minus 18'),
   maritalStatus: Joi.string().valid(...Object.values(MaritalStatusOptions)),
   partnerReceivingOas: Joi.boolean(),
   income: Joi.number().integer(),
@@ -54,6 +55,7 @@ export const RequestSchema = Joi.object({
 
 export const OasSchema = RequestSchema.concat(
   Joi.object({
+    // TODO: don't require when income over X
     age: Joi.required(),
     livingCountry: Joi.required(),
     legalStatus: Joi.required(),
@@ -95,15 +97,16 @@ export interface CalculationParams {
   livingCountry?: string;
   legalStatus?: LegalStatusOptions;
   yearsInCanadaSince18?: number;
-  oasEligible?: ResultOptions;
   maritalStatus?: MaritalStatusOptions;
   partnerReceivingOas?: boolean;
   income?: number;
+  _oasEligible?: ResultOptions;
 }
 
 export interface CalculationResult {
   result: ResultOptions;
   reason: ResultReasons;
   detail: String;
+  // TODO: use field names as type
   missingFields?: Array<String>;
 }

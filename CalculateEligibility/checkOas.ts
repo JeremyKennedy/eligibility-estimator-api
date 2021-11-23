@@ -85,5 +85,5 @@ export default function checkOas(
     };
   }
   // fallback
-  throw new Error("should not be here")
+  throw new Error('should not be here');
 }

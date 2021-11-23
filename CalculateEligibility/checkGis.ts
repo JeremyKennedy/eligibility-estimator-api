@@ -43,7 +43,7 @@ export default function checkGis(
     value.maritalStatus === undefined ||
     value.income === undefined
   ) {
-    throw new Error("should not be here")
+    throw new Error('should not be here');
   }
 
   // determine max income
