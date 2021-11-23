@@ -1,15 +1,31 @@
+import { Context } from '@azure/functions';
 import {
   CalculationParams,
   CalculationResult,
+  GisSchema,
   MaritalStatusOptions,
   ResultOptions,
   ResultReasons,
 } from './types';
+import { validateRequestForBenefit } from './validator';
 
 export default function checkGis(
-  value: CalculationParams,
-  oasResult: ResultOptions
+  params: CalculationParams,
+  oasResult: ResultOptions,
+  context: Context
 ): CalculationResult {
+  // include OAS result
+  const paramsWithOas = { ...params, _oasEligible: oasResult };
+
+  // validation
+  const { result, value } = validateRequestForBenefit(
+    GisSchema,
+    paramsWithOas,
+    context
+  );
+  // if the validation was able to return an error result, return it
+  if (result) return result;
+
   // helpers
   const partnered =
     value.maritalStatus == MaritalStatusOptions.MARRIED ||
@@ -25,22 +41,9 @@ export default function checkGis(
   } else if (
     oasResult == ResultOptions.MORE_INFO ||
     value.maritalStatus === undefined ||
-    value.income === undefined ||
-    (partnered && value.partnerReceivingOas === undefined)
+    value.income === undefined
   ) {
-    return {
-      result: ResultOptions.MORE_INFO,
-      reason: ResultReasons.MORE_INFO,
-      detail:
-        'The information you have provided is not sufficient to provide an answer.',
-    };
-  } else if (!partnered && value.partnerReceivingOas) {
-    return {
-      result: ResultOptions.INVALID,
-      reason: ResultReasons.INVALID,
-      detail:
-        'You can not be married/common law, and have a partner receiving OAS.',
-    };
+    throw new Error("should not be here")
   }
 
   // determine max income

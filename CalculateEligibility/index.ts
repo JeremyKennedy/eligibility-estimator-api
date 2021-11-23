@@ -7,34 +7,47 @@ const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
 ): Promise<void> {
-  context.log(`Processing request: `, req.query);
+  try {
+    context.log(`Processing request: `, req.query);
 
-  // validation
-  const { error, value } = RequestSchema.validate(req.query);
-  if (error) {
+    // validation
+    let { error, value } = RequestSchema.validate(req.query, {
+      abortEarly: false,
+    });
+    if (error) {
+      throw error;
+    }
+    context.log('Passed validation.');
+
+    // processing
+    const resultOas = checkOas(value, context);
+    context.log('OAS Result: ', resultOas);
+
+    const resultGis = checkGis(value, resultOas.result, context);
+    context.log('GIS Result: ', resultGis);
+
+    const allFields = [
+      ...Object.keys(value),
+      ...(resultOas.missingFields ? resultOas.missingFields : []),
+      ...(resultGis.missingFields ? resultGis.missingFields : []),
+    ];
+
+    // completion
+    context.res = {
+      status: 200,
+      body: { oas: resultOas, gis: resultGis, allFields },
+    };
+  } catch (error) {
     context.res = {
       status: 400,
       body: {
         error: ResultOptions.INVALID,
-        detail: error.details,
+        detail: error.details || String(error),
       },
     };
     context.log(error);
     return;
   }
-  context.log('Passed validation.');
-
-  // processing
-  const resultOas = checkOas(value);
-  context.log('OAS Result: ', resultOas);
-  const resultGis = checkGis(value, resultOas.result);
-  context.log('GIS Result: ', resultOas);
-
-  // completion
-  context.res = {
-    status: 200,
-    body: { oas: resultOas, gis: resultGis },
-  };
 };
 
 export default httpTrigger;

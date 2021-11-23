@@ -17,35 +17,6 @@ export enum LegalStatusOptions {
   NONE = 'None of the above',
 }
 
-export const RequestSchema = Joi.object({
-  age: Joi.number().integer().max(150).required(),
-  livingCountry: Joi.string(),
-  birthCountry: Joi.string(),
-  legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
-  yearsInCanadaSince18: Joi.number()
-    .max(Joi.ref('age', { adjust: (age) => age - 18 }))
-    .integer(),
-  maritalStatus: Joi.string().valid(...Object.values(MaritalStatusOptions)),
-  partnerReceivingOas: Joi.boolean(),
-  income: Joi.number().integer(),
-});
-
-export interface CalculationParams {
-  age?: number;
-  livingCountry?: string;
-  legalStatus?: LegalStatusOptions;
-  yearsInCanadaSince18?: number;
-  maritalStatus?: MaritalStatusOptions;
-  partnerReceivingOas?: boolean;
-  income?: number;
-}
-
-export interface CalculationResult {
-  result: ResultOptions;
-  reason: ResultReasons;
-  detail: String;
-}
-
 export enum ResultOptions {
   ELIGIBLE = `Eligible!`,
   ELIGIBLE_WHEN_65 = `Eligible when 65.`,
@@ -65,4 +36,74 @@ export enum ResultReasons {
   OAS = 'Not eligible for OAS',
   INCOME = 'Income too high',
   INVALID = `Entered data is invalid`,
+}
+
+// this is what the API expects to receive
+export const RequestSchema = Joi.object({
+  age: Joi.number().integer().max(150),
+  livingCountry: Joi.string(),
+  legalStatus: Joi.string().valid(...Object.values(LegalStatusOptions)),
+  yearsInCanadaSince18: Joi.number()
+    .integer()
+    .ruleset.max(Joi.ref('age', { adjust: (age) => age - 18 }))
+    .message('Years in Canada should be no more than age minus 18.'),
+  maritalStatus: Joi.string().valid(...Object.values(MaritalStatusOptions)),
+  partnerReceivingOas: Joi.boolean(),
+  income: Joi.number().integer(),
+});
+
+export const OasSchema = RequestSchema.concat(
+  Joi.object({
+    age: Joi.required(),
+    livingCountry: Joi.required(),
+    legalStatus: Joi.required(),
+    yearsInCanadaSince18: Joi.required(),
+  })
+);
+
+export const GisSchema = RequestSchema.concat(
+  Joi.object({
+    _oasEligible: Joi.string()
+      .valid(...Object.values(ResultOptions))
+      .required(),
+    maritalStatus: Joi.when('_oasEligible', {
+      not: Joi.valid(ResultOptions.INELIGIBLE),
+      then: Joi.required(),
+    }),
+    partnerReceivingOas: Joi.boolean()
+      .when('maritalStatus', {
+        is: Joi.exist().valid(
+          MaritalStatusOptions.MARRIED,
+          MaritalStatusOptions.COMMONLAW
+        ),
+        then: Joi.required(),
+        otherwise: Joi.forbidden(),
+      })
+      .when('_oasEligible', {
+        is: Joi.valid(ResultOptions.INELIGIBLE),
+        then: Joi.optional(),
+      }),
+    income: Joi.when('_oasEligible', {
+      not: Joi.valid(ResultOptions.INELIGIBLE),
+      then: Joi.required(),
+    }),
+  })
+);
+
+export interface CalculationParams {
+  age?: number;
+  livingCountry?: string;
+  legalStatus?: LegalStatusOptions;
+  yearsInCanadaSince18?: number;
+  oasEligible?: ResultOptions;
+  maritalStatus?: MaritalStatusOptions;
+  partnerReceivingOas?: boolean;
+  income?: number;
+}
+
+export interface CalculationResult {
+  result: ResultOptions;
+  reason: ResultReasons;
+  detail: String;
+  missingFields?: Array<String>;
 }

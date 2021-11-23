@@ -1,13 +1,28 @@
+import { Context } from '@azure/functions';
 import getIsAgreementCountry from './helpers/socialAgreement';
 import {
   CalculationParams,
   CalculationResult,
   LegalStatusOptions,
+  OasSchema,
   ResultOptions,
   ResultReasons,
 } from './types';
+import { validateRequestForBenefit } from './validator';
 
-export default function checkOas(value: CalculationParams): CalculationResult {
+export default function checkOas(
+  params: CalculationParams,
+  context: Context
+): CalculationResult {
+  // validation
+  const { result, value } = validateRequestForBenefit(
+    OasSchema,
+    params,
+    context
+  );
+  // if the validation was able to return an error result, return it
+  if (result) return result;
+
   // helpers
   const canadianCitizen = value.legalStatus
     ? [
@@ -58,7 +73,8 @@ export default function checkOas(value: CalculationParams): CalculationResult {
     return {
       result: ResultOptions.INELIGIBLE,
       reason: ResultReasons.CITIZEN,
-      detail: 'You currently do not appear to be eligible for the OAS pension as you have indicated that you do not have legal status in Canada. However, you may be in the future if you obtain legal status. If you are living outside of Canada, you may be eligible for the OAS pension if you had legal status prior to your departure.',
+      detail:
+        'You currently do not appear to be eligible for the OAS pension as you have indicated that you do not have legal status in Canada. However, you may be in the future if you obtain legal status. If you are living outside of Canada, you may be eligible for the OAS pension if you had legal status prior to your departure.',
     };
   } else if (inCountryWithAgreement == false) {
     return {
@@ -69,10 +85,5 @@ export default function checkOas(value: CalculationParams): CalculationResult {
     };
   }
   // fallback
-  return {
-    result: ResultOptions.MORE_INFO,
-    reason: ResultReasons.MORE_INFO,
-    detail:
-      'The information you have provided is not sufficient to provide an answer.',
-  };
+  throw new Error("should not be here")
 }
