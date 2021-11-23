@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-11-23T23:23:35.264Z
+__export_date: 2021-11-23T23:46:30.930Z
 __export_source: insomnia.desktop.app:v2021.6.0
 resources:
   - _id: req_wrk_90d4d590fb5a4034b3d98b7c08964852af277e8f
@@ -83,7 +83,7 @@ resources:
     _type: cookie_jar
   - _id: spc_8baaccaea9424f4b84a71dd08f84ee16
     parentId: wrk_90d4d590fb5a4034b3d98b7c08964852
-    modified: 1637709804467
+    modified: 1637711181239
     created: 1637016450877
     fileName: eligibility-estimator-openapi
     contents: >
@@ -98,6 +98,9 @@ resources:
 
 
           The code for this project is available [here](https://github.com/DTS-STN/eligibility-estimator-api).
+
+
+          **To interact with the API, press the "Try it out" button below on the right.**
 
       servers:
         - url: https://eligibilityestimatorapi.azurewebsites.net/api

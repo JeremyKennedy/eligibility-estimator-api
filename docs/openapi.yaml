@@ -9,6 +9,9 @@ info:
 
     The code for this project is available [here](https://github.com/DTS-STN/eligibility-estimator-api).
 
+
+    **To interact with the API, press the "Try it out" button below on the right.**
+
 servers:
   - url: https://eligibilityestimatorapi.azurewebsites.net/api
     description: 'Main production site'
