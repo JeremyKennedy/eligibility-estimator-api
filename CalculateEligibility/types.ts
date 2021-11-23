@@ -79,7 +79,7 @@ export const GisSchema = RequestSchema.concat(
           MaritalStatusOptions.COMMONLAW
         ),
         then: Joi.required(),
-        otherwise: Joi.forbidden(),
+        otherwise: Joi.boolean().falsy().valid(false),
       })
       .when('_oasEligible', {
         is: Joi.valid(ResultOptions.INELIGIBLE),

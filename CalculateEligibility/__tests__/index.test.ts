@@ -45,7 +45,7 @@ describe('sanity checks', () => {
     });
     expect(res.status).toEqual(200);
   });
-  it('fails when not partnered and "partnerReceivingOas" present', async () => {
+  it('fails when not partnered and "partnerReceivingOas" true', async () => {
     let { res } = await mockedRequestFactory({
       age: 65,
       maritalStatus: MaritalStatusOptions.SINGLE,
@@ -53,6 +53,14 @@ describe('sanity checks', () => {
     });
     expect(res.status).toEqual(400);
     expect(res.body.error).toEqual(ResultOptions.INVALID);
+  });
+  it('accepts when not partnered and "partnerReceivingOas" false', async () => {
+    let { res } = await mockedRequestFactory({
+      age: 65,
+      maritalStatus: MaritalStatusOptions.SINGLE,
+      partnerReceivingOas: false,
+    });
+    expect(res.status).toEqual(200);
   });
   it('accepts when partnered and "partnerReceivingOas" present', async () => {
     const { res } = await mockedRequestFactory({
