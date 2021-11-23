@@ -97,3 +97,6 @@ local.settings.json
 __blobstorage__
 __queuestorage__
 __azurite_db*__.json
+
+# explicitly include swagger-ui dist files, for GitHub Pages
+!docs/swagger-ui/dist
