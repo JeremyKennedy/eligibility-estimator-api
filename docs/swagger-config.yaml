@@ -1,0 +1,4 @@
+url: openapi.yaml
+defaultModelExpandDepth: 2
+defaultModelsExpandDepth: 2
+docExpansion: full

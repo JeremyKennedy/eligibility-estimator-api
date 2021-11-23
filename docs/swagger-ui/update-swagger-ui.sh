@@ -31,7 +31,7 @@ echo "Zip deleted."
 mv "dist/index.html" ".."
 
 # update data in index.html
-sed -i "s|https://petstore.swagger.io/v2/swagger.json|openapi.yaml|g" "../index.html"
+sed -i "s|url: \"https://petstore.swagger.io/v2/swagger.json\",|configUrl: \"swagger-config.yaml\",|g" "../index.html"
 sed -i "s|\./|swagger-ui/dist/|g" "../index.html"
 echo "index.html updated."
 
