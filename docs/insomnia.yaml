@@ -1,0 +1,326 @@
+_type: export
+__export_format: 4
+__export_date: 2021-11-19T17:56:53.945Z
+__export_source: insomnia.desktop.app:v2021.6.0
+resources:
+  - _id: req_wrk_90d4d590fb5a4034b3d98b7c08964852af277e8f
+    parentId: wrk_90d4d590fb5a4034b3d98b7c08964852
+    modified: 1637344193422
+    created: 1637344180348
+    url: "{{ base_url }}/CalculateEligibility"
+    name: Calculate eligibility
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - name: age
+        disabled: false
+        value: "0"
+        id: pair_b0d4e291d65b4d5f810d076caa9bd1b2
+      - name: livingCountry
+        disabled: true
+        value: string
+        id: pair_fa35b7566bd94b38b1baf3f2c4fc79ab
+      - name: legalStatus
+        disabled: true
+        value: string
+        id: pair_66e581732aa941269450773a7f92bab3
+      - name: yearsInCanadaSince18
+        disabled: true
+        value: "0"
+        id: pair_6b2e983dafd84eaebb09bd34fe7b545b
+      - name: maritalStatus
+        disabled: true
+        value: string
+        id: pair_3cb90a01dc17464987a1a558e0d2ef91
+      - name: partnerReceivingOas
+        disabled: true
+        value: "true"
+        id: pair_52ea4e588d7a4c8d8d7500efc89b56d3
+      - name: income
+        disabled: true
+        value: "0"
+        id: pair_f5e4be46770344af99b624e92e85443b
+    headers: []
+    authentication: {}
+    metaSortKey: -1637344180348
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: wrk_90d4d590fb5a4034b3d98b7c08964852
+    parentId: null
+    modified: 1637016450873
+    created: 1637016450873
+    name: eligibility-estimator.yaml
+    description: ""
+    scope: design
+    _type: workspace
+  - _id: env_e85c84355a7e428ff3e7002e5d1e8146fed429b0
+    parentId: wrk_90d4d590fb5a4034b3d98b7c08964852
+    modified: 1637016450884
+    created: 1637016450884
+    name: Base Environment
+    data:
+      base_url: "{{ scheme }}://{{ host }}{{ base_path }}"
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1637016450884
+    _type: environment
+  - _id: jar_e85c84355a7e428ff3e7002e5d1e8146fed429b0
+    parentId: wrk_90d4d590fb5a4034b3d98b7c08964852
+    modified: 1637016450890
+    created: 1637016450890
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_8baaccaea9424f4b84a71dd08f84ee16
+    parentId: wrk_90d4d590fb5a4034b3d98b7c08964852
+    modified: 1637344589387
+    created: 1637016450877
+    fileName: eligibility-estimator-openapi
+    contents: >
+      openapi: 3.0.3
+
+      info:
+        title: Eligibility Estimator API
+        version: '1.0'
+        description: "Calculates eligibility given a certain set of parameters."
+
+        
+      servers:
+        - url: https://eligibilityestimatorapi.azurewebsites.net/api
+          description: 'Main production site'
+        - url: http://localhost:7071/api
+          description: 'Local developer environment'
+
+      paths:
+        /CalculateEligibility:
+          get:
+            summary: "Calculate Eligibility"
+            description: "Calculates eligibility for all benefits given a certain set of parameters."
+            tags: 
+              - Calculation Requests
+            parameters:
+              - $ref: '#/components/parameters/age'
+              - $ref: '#/components/parameters/livingCountry'
+              - $ref: '#/components/parameters/legalStatus'
+              - $ref: '#/components/parameters/yearsInCanadaSince18'
+              - $ref: '#/components/parameters/maritalStatus'
+              - $ref: '#/components/parameters/partnerReceivingOas'
+              - $ref: '#/components/parameters/income'
+            responses:
+              '200':
+                $ref: '#/components/responses/200'
+              '400':
+                $ref: '#/components/responses/400'
+
+                
+      components:
+        schemas:
+          Country:
+            type: string
+            description: A valid country.
+            format: country
+            
+          ResultOptions:
+            type: string
+            description: A summary of the resulting eligibility calculation
+            format: string
+            enum:
+              - Eligible!
+              - Eligible when 65.
+              - Ineligible!
+              - Conditionally eligible...
+              - Need more information...
+              - Request is invalid!
+              
+          ResultReasons:
+            type: string
+            description: The reason for the provided outcome
+            format: string
+            enum:
+              - You meet the criteria
+              - Not yet 65
+              - Not enough years in Canada
+              - Not a Canadian citizen
+              - Not in a country with a social agreement
+              - Need more information...
+              - Not eligible for OAS
+              - Income too high
+              - Entered data is invalid
+              
+          ResultObject:
+            type: object
+            description: "The calculated result for a given benefit"
+            properties:
+              result:
+                $ref: '#/components/schemas/ResultOptions'
+              reason:
+                $ref: '#/components/schemas/ResultReasons'
+              detail:
+                type: string
+
+          ResponseObject:
+            type: object
+            description: 'The overall eligibility results'
+            properties: 
+              oas:
+                $ref: '#/components/schemas/ResultObject'
+              gis:
+                $ref: '#/components/schemas/ResultObject'
+
+          ErrorResponseObject:
+            type: object
+            description: 'Error details for the failed request'
+            properties:
+              error:
+                type: string
+              detail:
+                type: string
+
+        responses:
+          '200':
+            description: "Successful request and response"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ResponseObject'
+
+          '400':
+            description: "Invalid request"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponseObject'
+
+        parameters:
+          age:
+            name: age
+            in: query
+            description: The current age of the user.
+            required: true
+            example: 65
+            schema:
+              type: number
+              description: Age, up to a max of 150.
+              format: integer
+              maximum: 150
+            allowEmptyValue: false
+            
+          livingCountry:
+            name: livingCountry
+            in: query
+            description: The country that the user is currently living in.
+            required: false
+            example: Canada
+            allowEmptyValue: false
+            schema:
+              $ref: '#/components/schemas/Country'
+              
+          birthCountry:
+            name: birthCountry
+            in: query
+            description: The country that the user was born in.
+            required: false
+            example: Canada
+            allowEmptyValue: false
+            schema:
+              $ref: '#/components/schemas/Country'
+              
+          legalStatus:
+            name: legalStatus
+            in: query
+            description: The current legal status of the user.
+            required: false
+            example: 'Canadian Citizen'
+            schema:
+              type: string
+              enum:
+                - Canadian Citizen
+                - Permanent Resident
+                - Status Indian
+                - Temporary Resident
+                - None of the above
+              description: The current legal status of the user.
+              format: legalStatus
+            allowEmptyValue: false
+            
+          yearsInCanadaSince18:
+            name: yearsInCanadaSince18
+            in: query
+            description: How many years the user has lived in Canada since the age of 18.
+            required: false
+            example: 40
+            schema:
+              type: number
+              description: Years, up to a max of 100.
+              format: integer
+              maximum: 100
+            allowEmptyValue: false
+            
+          maritalStatus:
+            name: maritalStatus
+            in: query
+            description: The current marital status of the user.
+            required: false
+            example: 'Single'
+            schema:
+              type: string
+              enum:
+              - Single
+              - Married
+              - Common-law
+              - Widowed
+              - Divorced
+              - Seperated
+              description: The current marital status of the user.
+              format: maritalStatus
+            allowEmptyValue: false
+            
+          partnerReceivingOas:
+            name: partnerReceivingOas
+            in: query
+            description: Is the user's partner receiving OAS?
+            required: false
+            example: true
+            schema:
+              type: boolean
+            allowEmptyValue: false
+            
+          income:
+            name: income
+            in: query
+            description: The user's current (combined, if applicable) net income.
+            required: false
+            example: 40000
+            schema:
+              type: number
+              description: Income.
+              format: integer
+            allowEmptyValue: false
+    contentType: yaml
+    _type: api_spec
+  - _id: env_env_e85c84355a7e428ff3e7002e5d1e8146fed429b0_sub
+    parentId: env_e85c84355a7e428ff3e7002e5d1e8146fed429b0
+    modified: 1637342193322
+    created: 1637342147321
+    name: OpenAPI env
+    data:
+      scheme: https
+      base_path: ""
+      host: eligibilityestimatorapi.azurewebsites.net
+    dataPropertyOrder:
+      "&":
+        - scheme
+        - base_path
+        - host
+    color: null
+    isPrivate: false
+    metaSortKey: 1637342147321
+    _type: environment
